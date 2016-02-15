@@ -16,12 +16,20 @@ public class Speaker : MonoBehaviour {
         Debug.Log("Unity sample rate: " + AudioSettings.outputSampleRate);
     }
 
-    public void UpdateAudio(float[] data) {
-        _newData = data;
+    /// <summary>
+    /// Sets the new audio data to be played.
+    /// </summary>
+    /// <param name="sampleData">The sample data of the new audio.</param>
+    public void UpdateAudio(float[] sampleData) {
+        _newData = sampleData;
         _speaker.Play();
     }
 
-    private void OnAudioRead(float[] data) {
-        Array.Copy(_newData, data, data.Length);
+    /// <summary>
+    /// This gets called whenever audio is read.
+    /// </summary>
+    /// <param name="sampleData">Sample data of the current audio.</param>
+    private void OnAudioRead(float[] sampleData) {
+        Array.Copy(_newData, sampleData, sampleData.Length); // Copy the new audio to the current audio data.
     }
 }

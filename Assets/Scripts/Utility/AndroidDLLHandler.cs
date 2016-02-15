@@ -2,6 +2,9 @@
 using UnityEngine;
 
 namespace Utility {
+    /// <summary>
+    /// Android specific implementation for handling DLL loading.
+    /// </summary>
     public sealed class AndroidDLLHandler : IDLLHandler {
 
         private Assembly currentAssembly;

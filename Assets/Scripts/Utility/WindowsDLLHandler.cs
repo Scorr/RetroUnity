@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Utility {
+    /// <summary>
+    /// Windows specific implementation for handling DLL loading. Requires kernel32.dll.
+    /// </summary>
     public sealed class WindowsDLLHandler : IDLLHandler {
 
         [DllImport("kernel32.dll")]

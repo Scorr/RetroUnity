@@ -323,18 +323,20 @@ public class LibretroWrapper : MonoBehaviour {
         }
 
         private void RetroAudioSample(short left, short right) {
+            // Unused.
         }
-
+        
         private unsafe void RetroAudioSampleBatch(short* data, uint frames) {
             for (int i = 0; i < (int) frames; i++) {
                 short chunk = Marshal.ReadInt16((IntPtr) data);
-                data += sizeof (short);
-                float value = chunk/(float) _av.timing.sample_rate;
-                value = Mathf.Clamp(value, -1.0f, 1.0f);
+                data += sizeof (short); // Set pointer to next chunk.
+                float value = chunk/(float) _av.timing.sample_rate; // Divide by sample rate to get correct value.
+                value = Mathf.Clamp(value, -1.0f, 1.0f); // Unity's audio only takes values between -1 and 1.
 
                 AudioBatch[BatchPosition] = value;
                 BatchPosition++;
 
+                // When the batch is filled send it to the speakers.
                 if (BatchPosition >= AudioBatchSize) {
                     _leftSpeaker.UpdateAudio(AudioBatch);
                     _rightSpeaker.UpdateAudio(AudioBatch);
