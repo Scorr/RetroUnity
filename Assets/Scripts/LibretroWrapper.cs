@@ -337,7 +337,7 @@ public class LibretroWrapper : MonoBehaviour {
                 BatchPosition++;
 
                 // When the batch is filled send it to the speakers.
-                if (BatchPosition >= AudioBatchSize) {
+                if (BatchPosition >= AudioBatchSize - 1) {
                     _leftSpeaker.UpdateAudio(AudioBatch);
                     _rightSpeaker.UpdateAudio(AudioBatch);
                     BatchPosition = 0;
