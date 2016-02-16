@@ -330,7 +330,7 @@ public class LibretroWrapper : MonoBehaviour {
             for (int i = 0; i < (int) frames; i++) {
                 short chunk = Marshal.ReadInt16((IntPtr) data);
                 data += sizeof (short); // Set pointer to next chunk.
-                float value = chunk/(float) _av.timing.sample_rate; // Divide by sample rate to get correct value.
+                float value = chunk / 32768f; // Divide by Int16 max to get correct float value.
                 value = Mathf.Clamp(value, -1.0f, 1.0f); // Unity's audio only takes values between -1 and 1.
 
                 AudioBatch[BatchPosition] = value;

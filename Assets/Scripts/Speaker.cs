@@ -10,7 +10,7 @@ public class Speaker : MonoBehaviour {
     private void Start() {
         _speaker = GetComponent<AudioSource>();
         if (_speaker == null) return;
-        AudioClip clip = AudioClip.Create("Libretro", 1024, 2, 44100, true, OnAudioRead);
+        AudioClip clip = AudioClip.Create("Libretro", LibretroWrapper.Wrapper.AudioBatchSize / 2, 2, 44100, true, OnAudioRead);
         _speaker.clip = clip;
         _speaker.Play();
         Debug.Log("Unity sample rate: " + AudioSettings.outputSampleRate);
@@ -22,7 +22,7 @@ public class Speaker : MonoBehaviour {
     /// <param name="sampleData">The sample data of the new audio.</param>
     public void UpdateAudio(float[] sampleData) {
         _newData = sampleData;
-        _speaker.Play();
+        _speaker.PlayOneShot(_speaker.clip);
     }
 
     /// <summary>
