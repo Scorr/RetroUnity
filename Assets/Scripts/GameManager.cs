@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void LoadRom(string path) {
-#if !UNITY_ANDROID
+#if !UNITY_ANDROID || UNITY_EDITOR
         // Doesn't work on Android because you can't do File.Exists in StreamingAssets folder.
         // Should figure out a different way to perform check later.
         // If the file doesn't exist the application gets stuck in a loop.
