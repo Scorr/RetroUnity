@@ -31,9 +31,9 @@ sysinfo.txt
 *.unitypackage
 
 #RetroUnity
-.gba
-.gba.meta
-.srm
-.srm.meta
-.sfc
-.sfc.meta
+*.gba
+*.gba.meta
+*.srm
+*.srm.meta
+*.sfc
+*.sfc.meta
