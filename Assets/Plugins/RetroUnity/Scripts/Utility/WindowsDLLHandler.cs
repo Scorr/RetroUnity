@@ -52,6 +52,10 @@ namespace Utility {
             return true;
         }
 
+        public void UnloadCore() {
+            FreeLibrary(_dllPointer);
+        }
+
         public T GetMethod<T>(string functionName) where T : class {
             if (_dllPointer == IntPtr.Zero) {
                 Debug.LogError("DLL not found, cannot get method '" + functionName + "'");

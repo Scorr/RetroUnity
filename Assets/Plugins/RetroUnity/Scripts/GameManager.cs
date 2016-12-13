@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using UnityEngine;
+using Utility;
 
 public class GameManager : MonoBehaviour {
 
@@ -54,5 +55,9 @@ public class GameManager : MonoBehaviour {
 
         wrapper.Init();
         wrapper.LoadGame(path);
+    }
+
+    private void OnDestroy() {
+        WindowsDLLHandler.Instance.UnloadCore();
     }
 }
