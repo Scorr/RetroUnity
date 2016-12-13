@@ -19,7 +19,10 @@ namespace Utility {
 
         private static IntPtr _dllPointer = IntPtr.Zero;
 
-        private static readonly WindowsDLLHandler instance = new WindowsDLLHandler();
+        // Prevent warning on other platforms.
+#pragma warning disable 0414
+        private static readonly WindowsDLLHandler _instance = new WindowsDLLHandler();
+#pragma warning restore 0414
 
         /// <summary>
         /// Prevent 'new' keyword.
@@ -33,7 +36,7 @@ namespace Utility {
         public static WindowsDLLHandler Instance {
             get {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-                return instance;
+                return _instance;
 #else
                 Debug.LogError("This DLL handler is only compatible with Windows.");
                 return null;

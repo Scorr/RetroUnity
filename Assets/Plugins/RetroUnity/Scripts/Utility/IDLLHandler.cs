@@ -11,6 +11,8 @@
         /// <returns>Returns true if loading was succesful.</returns>
         bool LoadCore(string dllPath);
 
+        void UnloadCore();
+
         /// <summary>
         /// Get a method from the loaded DLL.
         /// </summary>

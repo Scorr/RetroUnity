@@ -9,7 +9,10 @@ namespace Utility {
 
         private Assembly currentAssembly;
 
-        private static readonly AndroidDLLHandler instance = new AndroidDLLHandler();
+        // Prevent warning on other platforms.
+#pragma warning disable 0414
+        private static readonly AndroidDLLHandler _instance = new AndroidDLLHandler();
+#pragma warning restore 0414
 
         /// <summary>
         /// Prevent 'new' keyword.
@@ -23,7 +26,7 @@ namespace Utility {
         public static AndroidDLLHandler Instance {
             get {
 #if UNITY_ANDROID
-                return instance;
+                return _instance;
 #else
                 Debug.LogError("This DLL handler is only compatible with Android.");
                 return null;
@@ -39,6 +42,10 @@ namespace Utility {
             }
             
             return currentAssembly != null;
+        }
+
+        public void UnloadCore() {
+            throw new System.NotImplementedException();
         }
 
         public T GetMethod<T>(string functionName) where T : class {
