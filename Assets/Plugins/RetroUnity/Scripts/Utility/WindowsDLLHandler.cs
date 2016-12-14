@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace Utility {
+namespace RetroUnity.Utility {
     /// <summary>
     /// Windows specific implementation for handling DLL loading. Requires kernel32.dll.
     /// </summary>

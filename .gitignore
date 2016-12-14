@@ -10,7 +10,7 @@ ExportedObj/
 .consulo/
 *.csproj
 *.unityproj
-*.sln
+RetroUnity.sln
 *.suo
 *.tmp
 *.user
@@ -313,3 +313,4 @@ __pycache__/
 *.srm.meta
 *.sfc
 *.sfc.meta
+Assets/StreamingAssets/snes9x_libretro.dll

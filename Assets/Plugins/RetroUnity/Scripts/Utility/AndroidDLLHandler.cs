@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using UnityEngine;
 
-namespace Utility {
+namespace RetroUnity.Utility {
     /// <summary>
     /// Android specific implementation for handling DLL loading.
     /// </summary>

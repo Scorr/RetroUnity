@@ -1,4 +1,4 @@
-﻿namespace Utility {
+﻿namespace RetroUnity.Utility {
     /// <summary>
     /// Interface for loading DLL's and their functions.
     /// </summary>
