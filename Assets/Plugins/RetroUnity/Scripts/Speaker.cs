@@ -22,7 +22,7 @@ public class Speaker : MonoBehaviour {
     /// <param name="sampleData">The sample data of the new audio.</param>
     public void UpdateAudio(float[] sampleData) {
         _newData = sampleData;
-        _speaker.PlayOneShot(_speaker.clip);
+        _speaker.Play();
     }
 
     /// <summary>

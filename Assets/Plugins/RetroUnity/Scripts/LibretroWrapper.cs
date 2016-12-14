@@ -24,9 +24,8 @@ using UnityEngine;
 using Utility;
 
 public class LibretroWrapper : MonoBehaviour {
-
-    private static Speaker _leftSpeaker;
-    private static Speaker _rightSpeaker;
+    
+    private static Speaker _speaker;
 
     public static Texture2D tex;
     public static int pix;
@@ -56,8 +55,7 @@ public class LibretroWrapper : MonoBehaviour {
     }
 
     private void Start() {
-        _leftSpeaker = GameObject.Find("LeftSpeaker").GetComponent<Speaker>();
-        _rightSpeaker = GameObject.Find("RightSpeaker").GetComponent<Speaker>();
+        _speaker = GameObject.Find("Speaker").GetComponent<Speaker>();
     }
 
     //Shouldn't be part of the wrapper, will remove later
@@ -128,7 +126,7 @@ public class LibretroWrapper : MonoBehaviour {
     }
 
     public class Wrapper {
-        public const int AudioBatchSize = 2048;
+        public const int AudioBatchSize = 4096;
         public static float[] AudioBatch = new float[AudioBatchSize];
         public static int BatchPosition;
         private PixelFormat _pixelFormat;
@@ -338,8 +336,7 @@ public class LibretroWrapper : MonoBehaviour {
 
                 // When the batch is filled send it to the speakers.
                 if (BatchPosition >= AudioBatchSize - 1) {
-                    _leftSpeaker.UpdateAudio(AudioBatch);
-                    _rightSpeaker.UpdateAudio(AudioBatch);
+                    _speaker.UpdateAudio(AudioBatch);
                     BatchPosition = 0;
                 }
             }
