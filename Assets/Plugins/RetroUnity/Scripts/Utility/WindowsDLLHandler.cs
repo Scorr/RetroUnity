@@ -8,7 +8,7 @@ namespace RetroUnity.Utility {
     /// </summary>
     public sealed class WindowsDLLHandler : IDLLHandler {
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr LoadLibrary(string dllToLoad);
 
         [DllImport("kernel32.dll")]
@@ -48,7 +48,8 @@ namespace RetroUnity.Utility {
             _dllPointer = LoadLibrary(dllPath);
 
             if (_dllPointer == IntPtr.Zero) {
-                Debug.LogError("Error loading DLL.");
+                int errorCode = Marshal.GetLastWin32Error();
+                Debug.LogErrorFormat("Failed to load library (ErrorCode: {0})", errorCode);
                 return false;
             }
 
@@ -68,6 +69,7 @@ namespace RetroUnity.Utility {
             IntPtr pAddressOfFunctionToCall = GetProcAddress(_dllPointer, functionName);
 
             if (pAddressOfFunctionToCall == IntPtr.Zero) {
+                Debug.LogError("Address for function " + functionName + " not found.");
                 return default(T);
             }
 
