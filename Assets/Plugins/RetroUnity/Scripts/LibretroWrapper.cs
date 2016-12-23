@@ -134,7 +134,6 @@ namespace RetroUnity {
             private bool _requiresFullPath;
             private SystemAVInfo _av;
             private Pixel[] _frameBuffer;
-            public static Texture2D Tex { get; set; }
             public static int Pix = 0;
             public static int w = 0;
             public static int h = 0;
@@ -247,7 +246,7 @@ namespace RetroUnity {
                                     Blue = (packed & 0x001F) / 31.0f
                                 };
                                 var color = new Color(((packed >> 10) & 0x001F) / 31.0f, ((packed >> 5) & 0x001F) / 31.0f, (packed & 0x001F) / 31.0f, 1.0f);
-                                Tex.SetPixel((int)i, (int)j, color);
+                                tex.SetPixel((int)i, (int)j, color);
                                 //pixels = (IntPtr)((int)pixels + size);
                             }
                             tex.filterMode = FilterMode.Trilinear;
@@ -276,7 +275,7 @@ namespace RetroUnity {
                                     Blue = (packed & 0x00FF) / 255.0f
                                 };
                                 var color = new Color(((packed >> 16) & 0x00FF) / 255.0f, ((packed >> 8) & 0x00FF) / 255.0f, (packed & 0x00FF) / 255.0f, 1.0f);
-                                Tex.SetPixel((int)i, (int)j, color);
+                                tex.SetPixel((int)i, (int)j, color);
                                 //pixels = (IntPtr)((int)pixels + size);
                             }
                             //pixels = (IntPtr)((int)rowStart + pitch);
