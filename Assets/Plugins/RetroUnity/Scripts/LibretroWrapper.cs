@@ -209,7 +209,8 @@ namespace RetroUnity {
                 // should be using memory streams or something
 
                 //Declare the pixel buffer to pass on to the renderer
-                _frameBuffer = new Pixel[width * height];
+                if(_frameBuffer == null || _frameBuffer.Length != width * height)
+                    _frameBuffer = new Pixel[width * height];
 
                 //Get the array from unmanaged memory as a pointer
                 var pixels = (IntPtr)data;
@@ -298,8 +299,10 @@ namespace RetroUnity {
                         LibretroWrapper.p = Convert.ToInt32(pitch);
                         int srcsize565 = 2 * (LibretroWrapper.p * LibretroWrapper.h);
                         int dstsize565 = 2 * (LibretroWrapper.w * LibretroWrapper.h);
-                        Src = new byte[srcsize565];
-                        Dst = new byte[dstsize565];
+                        if (Src == null || Src.Length != srcsize565)
+                            Src = new byte[srcsize565];
+                        if (Dst == null || Dst.Length != dstsize565)
+                            Dst = new byte[dstsize565];
                         Marshal.Copy(imagedata565, Src, 0, srcsize565);
                         int m565 = 0;
                         for (int y = 0; y < LibretroWrapper.h; y++) {
