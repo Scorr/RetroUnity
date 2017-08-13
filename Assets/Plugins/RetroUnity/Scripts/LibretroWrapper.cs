@@ -567,6 +567,10 @@ namespace RetroUnity {
             dllHandler = AndroidDLLHandler.Instance;
 #endif
                 if (dllHandler == null) return;
+                string path = Application.streamingAssetsPath + "/" + "libwinpthread-1.dll";
+                if (File.Exists(path))
+                    dllHandler.LoadCore(path);
+
                 dllHandler.LoadCore(dllName);
 
                 RetroApiVersion = dllHandler.GetMethod<RetroApiVersionDelegate>("retro_api_version");
