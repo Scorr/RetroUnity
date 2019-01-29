@@ -5,13 +5,13 @@ using UnityEngine;
 namespace RetroUnity {
     public class GameManager : MonoBehaviour {
 
-        private const string CoreName = "snes9x_libretro.dll";
-        private const string RomName = "Chrono Trigger (USA).sfc";
+        [SerializeField] private string CoreName = "snes9x_libretro.dll";
+        [SerializeField] private string RomName = "Chrono Trigger (USA).sfc";
         private LibretroWrapper.Wrapper wrapper;
 
         public Renderer Display;
 
-        private void Start() {
+        private void Awake() {
             Application.targetFrameRate = 60;
             LoadRom(Application.streamingAssetsPath + "/" + RomName);
         }

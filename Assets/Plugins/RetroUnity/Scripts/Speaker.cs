@@ -6,32 +6,35 @@ namespace RetroUnity {
     public class Speaker : MonoBehaviour {
 
         private AudioSource _speaker;
-        private float[] _newData = new float[LibretroWrapper.Wrapper.AudioBatchSize];
 
         private void Start() {
             _speaker = GetComponent<AudioSource>();
             if (_speaker == null) return;
-            AudioClip clip = AudioClip.Create("Libretro", LibretroWrapper.Wrapper.AudioBatchSize / 2, 2, 44100, true, OnAudioRead);
-            _speaker.clip = clip;
+            //var audioConfig = AudioSettings.GetConfiguration();
+            //audioConfig.sampleRate = 32000;
+            //AudioSettings.Reset(audioConfig);
+            //AudioClip clip = AudioClip.Create("Libretro", LibretroWrapper.Wrapper.AudioBatchSize / 2, 2, 44100, true, OnAudioRead);
+            //AudioClip clip = AudioClip.Create("Libretro", 256, 2, 32000, true);
+            //_speaker.clip = clip;
             _speaker.Play();
-            Debug.Log("Unity sample rate: " + AudioSettings.outputSampleRate);
+            //_speaker.loop = true;
+            //Debug.Log("Unity sample rate: " + audioConfig.sampleRate);
+            //Debug.Log("Unity buffer size: " + audioConfig.dspBufferSize);
         }
 
-        /// <summary>
-        /// Sets the new audio data to be played.
-        /// </summary>
-        /// <param name="sampleData">The sample data of the new audio.</param>
-        public void UpdateAudio(float[] sampleData) {
-            _newData = sampleData;
-            _speaker.Play();
+        private void OnAudioFilterRead(float[] data, int channels) {
+            // wait until enough data is available
+            if (LibretroWrapper.Wrapper.AudioBatch.Count < data.Length)
+                return;
+            int i;
+            for (i = 0; i < data.Length; i++)
+                data[i] = LibretroWrapper.Wrapper.AudioBatch[i];
+            // remove data from the beginning
+            LibretroWrapper.Wrapper.AudioBatch.RemoveRange(0, i);
         }
 
-        /// <summary>
-        /// This gets called whenever audio is read.
-        /// </summary>
-        /// <param name="sampleData">Sample data of the current audio.</param>
-        private void OnAudioRead(float[] sampleData) {
-            Array.Copy(_newData, sampleData, sampleData.Length); // Copy the new audio to the current audio data.
+        private void OnGUI() {
+            GUI.Label(new Rect(0f, 0f, 300f, 20f), LibretroWrapper.Wrapper.AudioBatch.Count.ToString());
         }
     }
 }

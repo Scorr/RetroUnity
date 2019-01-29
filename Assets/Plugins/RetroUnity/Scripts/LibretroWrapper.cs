@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using RetroUnity.Utility;
@@ -128,7 +129,7 @@ namespace RetroUnity {
 
         public class Wrapper {
             public const int AudioBatchSize = 4096;
-            public static float[] AudioBatch = new float[AudioBatchSize];
+            public static List<float> AudioBatch = new List<float>(65536);
             public static int BatchPosition;
             private PixelFormat _pixelFormat;
             private bool _requiresFullPath;
@@ -328,20 +329,25 @@ namespace RetroUnity {
             }
         
             private unsafe void RetroAudioSampleBatch(short* data, uint frames) {
-                for (int i = 0; i < (int) frames; i++) {
-                    short chunk = Marshal.ReadInt16((IntPtr) data);
-                    data += sizeof (short); // Set pointer to next chunk.
-                    float value = chunk / 32768f; // Divide by Int16 max to get correct float value.
+                //for (int i = 0; i < (int) frames; i++) {
+                //    short chunk = Marshal.ReadInt16((IntPtr) data);
+                //    data += sizeof (short); // Set pointer to next chunk.
+                //    float value = chunk / 32768f; // Divide by Int16 max to get correct float value.
+                //    value = Mathf.Clamp(value, -1.0f, 1.0f); // Unity's audio only takes values between -1 and 1.
+
+                //    AudioBatch[BatchPosition] = value;
+                //    BatchPosition++;
+
+                //    // When the batch is filled send it to the speakers.
+                //    if (BatchPosition >= AudioBatchSize - 1) {
+                //        _speaker.UpdateAudio(AudioBatch);
+                //        BatchPosition = 0;
+                //    }
+                //}
+                for (int i = 0; i < frames * 2; ++i) {
+                    float value = data[i] * 0.000030517578125f;
                     value = Mathf.Clamp(value, -1.0f, 1.0f); // Unity's audio only takes values between -1 and 1.
-
-                    AudioBatch[BatchPosition] = value;
-                    BatchPosition++;
-
-                    // When the batch is filled send it to the speakers.
-                    if (BatchPosition >= AudioBatchSize - 1) {
-                        _speaker.UpdateAudio(AudioBatch);
-                        BatchPosition = 0;
-                    }
+                    AudioBatch.Add(value);
                 }
             }
 
@@ -461,6 +467,10 @@ namespace RetroUnity {
 
                 _av = new SystemAVInfo();
                 Libretro.RetroGetSystemAVInfo(ref _av);
+
+                var audioConfig = AudioSettings.GetConfiguration();
+                audioConfig.sampleRate = (int)_av.timing.sample_rate;
+                AudioSettings.Reset(audioConfig);
 
                 Debug.Log("Geometry:");
                 Debug.Log("Base width: " + _av.geometry.base_width);
