@@ -9,35 +9,28 @@ namespace RetroUnity {
         [SerializeField] private string RomName = "Chrono Trigger (USA).sfc";
         private LibretroWrapper.Wrapper wrapper;
 
+        private float _frameTimer;
+
         public Renderer Display;
 
         private void Awake() {
-            Application.targetFrameRate = 60;
             LoadRom(Application.streamingAssetsPath + "/" + RomName);
         }
 
         private void Update() {
             if (wrapper != null) {
-                wrapper.Update();
+                _frameTimer += Time.deltaTime;
+                float timePerFrame = 1f / (float)wrapper.GetAVInfo().timing.fps;
+
+                while (_frameTimer >= timePerFrame)
+                {
+                    wrapper.Update();
+                    _frameTimer -= timePerFrame;
+                }
             }
             if (LibretroWrapper.tex != null) {
                 Display.material.mainTexture = LibretroWrapper.tex;
             }
-
-            // debug input
-            //if (Input.GetButton("B")) Debug.Log("B");
-            //if (Input.GetButton("Y")) Debug.Log("Y");
-            //if (Input.GetButton("SELECT")) Debug.Log("SELECT");
-            //if (Input.GetButton("START")) Debug.Log("START");
-            //if (Input.GetAxisRaw("DpadX") >= 1.0f) Debug.Log("UP");
-            //if (Input.GetAxisRaw("DpadX") <= -1.0f) Debug.Log("DOWN");
-            //if (Input.GetAxisRaw("DpadY") >= 1.0f) Debug.Log("RIGHT");
-            //if (Input.GetAxisRaw("DpadY") <= -1.0f) Debug.Log("LEFT");
-            //if (Input.GetButton("A")) Debug.Log("A");
-            //if (Input.GetButton("X")) Debug.Log("X");
-            //if (Input.GetButton("L")) Debug.Log("L");
-            //if (Input.GetButton("R")) Debug.Log("R");
-
         }
 
         public void LoadRom(string path) {
