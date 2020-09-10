@@ -315,6 +315,8 @@ __pycache__/
 *.sfc.meta
 # Android
 Assets/Plugins/*_android.so
+# iOS
+Assets/Plugins/*_ios.dylib
 # Windows
 Assets/StreamingAssets/*.dll
 # Mac
