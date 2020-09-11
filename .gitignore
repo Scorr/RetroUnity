@@ -313,4 +313,13 @@ __pycache__/
 *.srm.meta
 *.sfc
 *.sfc.meta
-Assets/StreamingAssets/snes9x_libretro.dll
+# Android
+Assets/Plugins/*_android.so
+# iOS
+Assets/Plugins/*_ios.dylib
+# Windows
+Assets/StreamingAssets/*.dll
+# Mac
+Assets/StreamingAssets/*.dylib
+# Linux
+Assets/StreamingAssets/*.so
