@@ -142,6 +142,8 @@ namespace RetroUnity {
             public static uint Button;
             public static uint Keep;
 
+            public IDLLHandler DLLHandler;
+
             //Prevent GC on delegates as long as the wrapper is running
             private Libretro.RetroEnvironmentDelegate _environment;
             private Libretro.RetroVideoRefreshDelegate _videoRefresh;
@@ -150,7 +152,7 @@ namespace RetroUnity {
             private Libretro.RetroInputPollDelegate _inputPoll;
             private Libretro.RetroInputStateDelegate _inputState;
             public Wrapper(string coreToLoad) {
-                Libretro.InitializeLibrary(coreToLoad);
+                DLLHandler = Libretro.InitializeLibrary(coreToLoad);
             }
 
             public unsafe void Init() {
@@ -569,20 +571,28 @@ namespace RetroUnity {
             //typedef bool (*retro_environment_t)(unsigned cmd, void *data);
             public delegate bool RetroEnvironmentDelegate(uint cmd, void* data);
 
-            public static void InitializeLibrary(string dllName) {
+
+            public static IDLLHandler InitializeLibrary(string dllName) {
+
                 IDLLHandler dllHandler = null;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-                dllHandler = WindowsDLLHandler.Instance;
+        dllHandler = WindowsDLLHandler.Instance;
+#elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+        dllHandler = OSXDLLHandler.Instance;
+#elif UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+        dllHandler = LinuxDLLHandler.Instance;
 #elif UNITY_ANDROID
-            dllHandler = AndroidDLLHandler.Instance;
+        dllHandler = AndroidDLLHandler.Instance;
 #endif
-                if (dllHandler == null) return;
-                string path = Application.streamingAssetsPath + "/" + "libwinpthread-1.dll";
-                if (File.Exists(path))
-                    dllHandler.LoadCore(path);
 
+                if (dllHandler == null) return null;
+
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                    dllHandler.LoadCore("libwinpthread-1");
+#endif
+                
                 dllHandler.LoadCore(dllName);
-
+                
                 RetroApiVersion = dllHandler.GetMethod<RetroApiVersionDelegate>("retro_api_version");
                 RetroInit = dllHandler.GetMethod<RetroInitDelegate>("retro_init");
                 RetroGetSystemInfo = dllHandler.GetMethod<RetroGetSystemInfoDelegate>("retro_get_system_info");
@@ -596,6 +606,8 @@ namespace RetroUnity {
                 RetroSetEnvironment = dllHandler.GetMethod<RetroSetEnvironmentDelegate>("retro_set_environment");
                 RetroRun = dllHandler.GetMethod<RetroRunDelegate>("retro_run");
                 RetroDeInit = dllHandler.GetMethod<RetroDeInitDelegate>("retro_deinit");
+
+                return dllHandler;
             }
         }
     }

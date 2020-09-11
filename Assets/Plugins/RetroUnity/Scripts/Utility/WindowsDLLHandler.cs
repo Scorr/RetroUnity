@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -44,7 +45,10 @@ namespace RetroUnity.Utility {
             }
         }
 
-        public bool LoadCore(string dllPath) {
+        public bool LoadCore(string dllName) {
+            string dllPath = Path.Combine(Application.streamingAssetsPath,dllName) + ".dll";
+            Debug.Log("LoadCore: " + dllPath);            
+            
             _dllPointer = LoadLibrary(dllPath);
 
             if (_dllPointer == IntPtr.Zero) {

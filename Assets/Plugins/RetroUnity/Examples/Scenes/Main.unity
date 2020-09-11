@@ -517,7 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ea678dff3796c4c92ab162cb5764bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CoreName: snes9x_libretro.dll
+  CoreName: snes9x_libretro
   RomName: Chrono Trigger (USA).sfc
   Display: {fileID: 635089074}
 --- !u!1001 &1178825821
